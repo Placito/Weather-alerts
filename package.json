@@ -1,0 +1,25 @@
+
+{
+  "name": "weather_alerts",
+  "version": "1.0.0",
+  "description": "Pequena aplicação web de previsão meteorológica e alertas automáticos de **geada**, **chuva forte** e **seca**. O frontend é React + Vite e o backend é Node.js + Express. Apenas o servidor comunica com a API pública da [Open-Meteo](https://open-meteo.com/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm start --prefix server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Placito/Weather-alerts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Placito/Weather-alerts/issues"
+  },
+  "homepage": "https://github.com/Placito/Weather-alerts#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}

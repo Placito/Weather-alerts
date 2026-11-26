@@ -166,13 +166,13 @@ export default function App() {
           <span className="brand-mark">☀</span>
           <span>tempo<span className="brand-light">&alertas</span></span>
         </a>
-        <span className="topbar-note">Previsão local · próximos 10 dias</span>
+        <span className="topbar-note"> Previsão local · próximos 10 dias</span>
       </header>
 
       <main id="top" className="main-content">
         <section className="hero">
           <div className="eyebrow"><span className="eyebrow-dot" /> METEOROLOGIA EM TEMPO ÚTIL</div>
-          <h1>O tempo muda.<br /><span>Esteja preparado.</span></h1>
+          <h1>O tempo muda.<br /><br /><span>Esteja preparado.</span></h1>
           <p className="hero-copy">Consulte a previsão para a sua localização e receba alertas automáticos de geada, chuva forte e períodos de seca.</p>
         </section>
 
