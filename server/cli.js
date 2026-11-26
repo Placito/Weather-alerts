@@ -15,15 +15,17 @@ try {
   if (alerts.length === 0) {
     console.log('Não foram encontrados alertas.');
   } else {
-    for (const alert of alerts) {
-      if (alert.type === 'seca') {
-        console.log(`- SECA | ${alert.startDate} a ${alert.endDate} | ${alert.days} dias`);
-      } else if (alert.type === 'geada') {
-        console.log(`- GEADA | ${alert.date} | temperatura mínima: ${alert.value} °C`);
-      } else {
-        console.log(`- CHUVA FORTE | ${alert.date} | precipitação: ${alert.value} mm`);
-      }
-    }
+ for (const alert of alerts) {
+  if (alert.type === 'seca') {
+    console.log(`- SECA | ${alert.startDate} a ${alert.endDate} | ${alert.days} dias`);
+  } else if (alert.type === 'geada') {
+    console.log(`- GEADA | ${alert.date} | temperatura mínima: ${alert.value} °C`);
+  } else if (alert.type === 'chuva_forte') {
+    console.log(`- CHUVA FORTE | ${alert.date} | precipitação: ${alert.value} mm`);
+  } else if (alert.type === 'ventos_fortes') {
+    console.log(`- VENTOS FORTES | ${alert.date} | rajadas máximas: ${alert.value} km/h`);
+  }
+}
   }
 } catch (error) {
   console.error(`Erro ao ler o ficheiro de exemplo: ${error.message}`);
