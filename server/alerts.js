@@ -1,3 +1,4 @@
+
 const ALERT_TYPES = {
   frost: 'geada',
   heavyRain: 'chuva_forte',
@@ -6,11 +7,12 @@ const ALERT_TYPES = {
 };
 
 /**
- * Generates alerts from the `daily` object returned by Open-Meteo.
- * A null or missing value never generates an alert and interrupts any drought sequence.
+ * Generates alerts from the daily object returned by Open-Meteo.
+ * Missing or null values never generate alerts and interrupt drought sequences.
  */
 export function generateAlerts(daily = {}) {
   daily = daily ?? {};
+
   const dates = Array.isArray(daily.time) ? daily.time : [];
   const minimums = Array.isArray(daily.temperature_2m_min)
     ? daily.temperature_2m_min
@@ -18,8 +20,6 @@ export function generateAlerts(daily = {}) {
   const precipitation = Array.isArray(daily.precipitation_sum)
     ? daily.precipitation_sum
     : [];
-
-  // Maximum wind gusts in km/h.
   const windGusts = Array.isArray(daily.wind_gusts_10m_max)
     ? daily.wind_gusts_10m_max
     : [];
@@ -42,18 +42,18 @@ export function generateAlerts(daily = {}) {
       });
     }
 
-    // Resets the dry period counters.
     dryStart = null;
     dryEnd = null;
     dryDays = 0;
   };
 
-  // Iterates through each forecast date.
+  // Checks the weather conditions for each forecast day.
   dates.forEach((date, index) => {
     const min = minimums[index];
     const rain = precipitation[index];
+    const wind = windGusts[index];
 
-    // Generates a frost alert when the minimum temperature is 0 °C or lower.
+    // Frost alert: minimum temperature is 0 °C or lower.
     if (typeof min === 'number' && Number.isFinite(min) && min <= 0) {
       alerts.push({
         type: ALERT_TYPES.frost,
@@ -63,7 +63,7 @@ export function generateAlerts(daily = {}) {
       });
     }
 
-    // Checks precipitation values and generates heavy rain or drought alerts.
+    // Heavy rain alert: precipitation is 20 mm or higher.
     if (typeof rain === 'number' && Number.isFinite(rain)) {
       if (rain >= 20) {
         alerts.push({
@@ -83,27 +83,27 @@ export function generateAlerts(daily = {}) {
         closeDryPeriod();
       }
     } else {
-      // Missing data interrupts the consecutive dry-day sequence.
+      // Missing precipitation data interrupts the drought sequence.
       closeDryPeriod();
+    }
+
+    // Strong wind alert: maximum wind gusts are 70 km/h or higher.
+    if (
+      typeof wind === 'number' &&
+      Number.isFinite(wind) &&
+      wind >= 70
+    ) {
+      alerts.push({
+        type: ALERT_TYPES.wind_gusts_10m_max,
+        date,
+        value: wind,
+        message: `Ventos fortes previstos: rajadas máximas de ${wind} km/h.`
+      });
     }
   });
 
-  // Closes the final dry period after processing all forecast dates.
+  // Closes the final drought period after processing all forecast days.
   closeDryPeriod();
 
-  // Generates a strong wind alert when maximum gusts reach 70 km/h or higher.
-  if (
-    typeof wind === 'number' &&
-    Number.isFinite(wind) &&
-    wind >= 70
-  ) {
-    alerts.push({
-      type: ALERT_TYPES.wind_gusts_10m_max,
-      date,
-      value: wind,
-      message: `Ventos fortes previstos: rajadas máximas de ${wind} km/h.`
-    });
-
   return alerts;
-    }
 }
