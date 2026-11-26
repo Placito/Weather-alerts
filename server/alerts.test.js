@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateAlerts } from './alerts.js';
 
-// Creates a daily weather object using the provided minimum temperatures and precipitation values.
-const makeDaily = (minimums, rain) => ({
+// Creates a daily weather object using the provided minimum temperatures, precipitation, and wind gusts.
+const makeDaily = (minimums, rain, windGusts = []) => ({
   time: minimums.map((_, index) => `2026-01-${String(index + 1).padStart(2, '0')}`),
   temperature_2m_min: minimums,
-  precipitation_sum: rain
+  precipitation_sum: rain,
+  wind_gusts_10m_max: windGusts
 });
 
 // Tests whether a frost alert is generated when the minimum temperature is 0 °C or lower.
@@ -49,4 +50,24 @@ test('null não gera alertas e interrompe uma sequência de seca', () => {
 test('aceita dados diários em falta sem lançar exceções', () => {
   assert.deepEqual(generateAlerts({ time: ['2026-01-01'] }), []);
   assert.deepEqual(generateAlerts(null), []);
+
+  
+});
+
+// Tests whether a strong wind alert is generated when maximum wind gusts reach 70 km/h or higher.
+test('gera alerta de ventos fortes a partir de 70 km/h, incluindo exatamente 70 km/h', () => {
+  const alerts = generateAlerts(
+    makeDaily(
+      [5, 5, 5, 5],
+      [4, 4, 4, 4],
+      [69.9, 70, 75, 85]
+    )
+  );
+
+  const windAlerts = alerts.filter((item) => item.type === 'ventos_fortes');
+
+  assert.deepEqual(
+    windAlerts.map((item) => item.value),
+    [70, 75, 85]
+  );
 });
