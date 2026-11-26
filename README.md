@@ -100,8 +100,7 @@ I also kept the Open-Meteo API call on the server rather than in the browser, to
 
 ## Future Improvements
 
-1. Integrate the original `exemplo.json` provided for the assignment and verify the expected output.
-2. Use shared Redis caching if the application needs to run across multiple instances.
-3. Add location search by name and save favourite locations in a database, with optional authentication.
-4. Add integration tests for the HTTP route, including timeout, API errors, and cache fallback.
-5. Improve accessibility, internationalisation, and service monitoring.
+1. Use shared Redis caching if the application needs to run across multiple instances.
+2. Add location search by name and save favourite locations in a database, with optional authentication.
+3. Add integration tests for the HTTP route, including timeout, API errors, and cache fallback.
+4. Improve accessibility, internationalisation, and service monitoring.
