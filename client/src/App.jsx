@@ -172,7 +172,7 @@ export default function App() {
       <main id="top" className="main-content">
         <section className="hero">
           <div className="eyebrow"><span className="eyebrow-dot" /> METEOROLOGIA EM TEMPO ÚTIL</div>
-          <h1>O tempo muda.<br /><br /><span>Esteja preparado.</span></h1>
+          <h1>O tempo muda, </h1><br /><h2>Esteja preparado.</h2>
           <p className="hero-copy">Consulte a previsão para a sua localização e receba alertas automáticos de geada, chuva forte e períodos de seca.</p>
         </section>
 
