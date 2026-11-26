@@ -31,7 +31,12 @@ async function fetchForecast(latitude, longitude) {
   url.search = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
-    daily: 'temperature_2m_min,temperature_2m_max,precipitation_sum',
+    daily: [
+  'temperature_2m_min',
+  'temperature_2m_max',
+  'precipitation_sum',
+  'wind_gusts_10m_max'
+].join(','),
     timezone: 'auto',
     forecast_days: '10'
   }).toString();
@@ -137,11 +142,22 @@ app.get('/api/weather', async (req, res) => {
 });
 
 const clientDist = path.resolve(__dirname, '../client/dist');
+
+// Serve static React files
 app.use(express.static(clientDist));
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(clientDist, 'index.html'), (error) => {
-    if (error) res.status(404).send('Frontend não compilado. Execute npm run build.');
-  });
+
+// Express 5: wildcard route
+app.get('/{*splat}', (_req, res) => {
+    res.sendFile(
+        path.join(clientDist, 'index.html'),
+        (error) => {
+            if (error) {
+                res.status(404).send(
+                    'Frontend não compilado. Execute npm run build.'
+                );
+            }
+        }
+    );
 });
 
 app.listen(PORT, () => {

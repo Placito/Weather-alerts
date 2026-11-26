@@ -1,6 +1,5 @@
 # Weather alerts
 
-
 Pequena aplicação web de previsão meteorológica e alertas automáticos de **geada**, **chuva forte** e **seca**. O frontend é React + Vite e o backend é Node.js + Express. Apenas o servidor comunica com a API pública da [Open-Meteo](https://open-meteo.com/).
 
 ## Requisitos

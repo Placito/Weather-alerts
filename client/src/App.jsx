@@ -23,27 +23,61 @@ export default function App() {
   const [error, setError] = useState('');
   const [locationMessage, setLocationMessage] = useState('');
 
-  async function loadForecast(lat = latitude, lon = longitude) {
-    if (lat === '' || lon === '') {
-      setError('Introduza a latitude e a longitude para consultar a previsão.');
-      return;
+async function loadForecast(lat = latitude, lon = longitude) {
+    // Convert commas to decimal points
+    const latitudeValue = Number(String(lat).trim().replace(',', '.'));
+    const longitudeValue = Number(String(lon).trim().replace(',', '.'));
+
+    // Validate coordinates
+    if (
+        lat === '' || lon === '' ||
+        !Number.isFinite(latitudeValue) ||
+        !Number.isFinite(longitudeValue) ||
+        latitudeValue < -90 || latitudeValue > 90 ||
+        longitudeValue < -180 || longitudeValue > 180
+    ) {
+        setError('Introduza coordenadas válidas.');
+        return;
     }
 
     setLoading(true);
     setError('');
     setWeather(null);
+
     try {
-      const params = new URLSearchParams({ latitude: String(lat), longitude: String(lon) });
-      const response = await fetch(`/api/weather?${params}`);
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || 'Não foi possível carregar a previsão.');
-      setWeather(payload);
+        const params = new URLSearchParams({
+            latitude: String(latitudeValue),
+            longitude: String(longitudeValue)
+        });
+
+        const response = await fetch(`/api/weather?${params}`);
+
+        // Read response as text first
+        const responseText = await response.text();
+
+        // Check whether the response is JSON
+        let payload;
+
+        try {
+            payload = JSON.parse(responseText);
+        } catch {
+            throw new Error(
+                'O servidor devolveu HTML em vez de JSON. Verifique a ligação ao backend Node.js.'
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(payload.error || 'Não foi possível carregar a previsão.');
+        }
+
+        setWeather(payload);
+
     } catch (err) {
-      setError(err.message || 'Ocorreu um erro inesperado. Tente novamente.');
+        setError(err.message || 'Ocorreu um erro inesperado. Tente novamente.');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  }
+}
 
   function requestLocation() {
     setLocationMessage('');

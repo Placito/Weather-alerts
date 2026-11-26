@@ -1,7 +1,8 @@
 const ALERT_TYPES = {
   frost: 'geada',
   heavyRain: 'chuva_forte',
-  drought: 'seca'
+  drought: 'seca',
+  wind_gusts_10m_max: 'ventos_fortes',
 };
 
 /**
@@ -16,6 +17,10 @@ export function generateAlerts(daily = {}) {
     : [];
   const precipitation = Array.isArray(daily.precipitation_sum)
     ? daily.precipitation_sum
+    : [];
+    // Rajadas máximas de vento em km/h
+  const windGusts = Array.isArray(daily.wind_gusts_10m_max)
+    ? daily.wind_gusts_10m_max
     : [];
 
   const alerts = [];
@@ -76,6 +81,20 @@ export function generateAlerts(daily = {}) {
   });
 
   closeDryPeriod();
+  
+  // Ventos fortes
+    if (
+      typeof wind === 'number' &&
+      Number.isFinite(wind) &&
+      wind >= 70
+    ) {
+      alerts.push({
+        type: ALERT_TYPES.wind_gusts_10m_max,
+        date,
+        value: wind,
+        message: `Ventos fortes previstos: rajadas máximas de ${wind} km/h.`
+      });
 
   return alerts;
+    }
 }
