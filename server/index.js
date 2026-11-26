@@ -48,8 +48,10 @@ async function fetchForecast(latitude, longitude) {
   return weather;
 }
 
+// Endpoint para verificar se o servidor está ativo
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
+// Endpointfor api/weather que retorna a previsão meteorológica e alertas para coordenadas fornecidas
 app.get('/api/weather', async (req, res) => {
   const latitudeInput = Number(req.query.latitude);
   const longitudeInput = Number(req.query.longitude);
