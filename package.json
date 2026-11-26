@@ -6,7 +6,8 @@
   "main": "index.js",
  "scripts": {
   "dev": "concurrently \"npm run dev --prefix client\" \"npm start --prefix server\"",
-  "test": "npm test --prefix server"
+  "test": "npm test --prefix server",
+  "alerts:example": "node server/cli.js exemplo.json"
 },
   "repository": {
     "type": "git",
