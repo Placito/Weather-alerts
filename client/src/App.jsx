@@ -3,7 +3,8 @@ import { useState } from 'react';
 const ALERT_META = {
   geada: { icon: '❄️', title: 'Geada', className: 'frost', description: 'Temperatura mínima igual ou inferior a 0 °C' },
   chuva_forte: { icon: '🌧️', title: 'Chuva forte', className: 'rain', description: 'Precipitação igual ou superior a 20 mm' },
-  seca: { icon: '☀️', title: 'Seca', className: 'drought', description: 'Pelo menos 5 dias seguidos com menos de 1 mm' }
+  seca: { icon: '☀️', title: 'Seca', className: 'drought', description: 'Pelo menos 5 dias seguidos com menos de 1 mm' },
+  ventos_fortes: { icon: '💨', title: 'Ventos fortes', className: 'wind', description: 'Rajadas de vento igual ou superior a 70 km/h' },
 };
 
 function formatDate(value, options = { weekday: 'short', day: 'numeric', month: 'short' }) {
@@ -205,7 +206,7 @@ async function loadForecast(lat = latitude, lon = longitude) {
                 <span className={`alert-total ${alerts.length ? 'has-alerts' : ''}`}>{alerts.length} {alerts.length === 1 ? 'alerta' : 'alertas'}</span>
               </div>
               {alerts.length === 0 ? (
-                <div className="no-alerts"><span>✓</span><div><strong>Sem alertas previstos</strong><p>Não foram detetadas condições de geada, chuva forte ou seca nos próximos dias.</p></div></div>
+                <div className="no-alerts"><span>✓</span><div><strong>Sem alertas previstos</strong><p>Não foram detetadas condições de geada, chuva forte, ventos fortes ou seca nos próximos dias.</p></div></div>
               ) : (
                 <div className="alerts-list">
                   {alerts.map((alert, index) => {
